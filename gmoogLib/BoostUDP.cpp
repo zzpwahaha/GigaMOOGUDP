@@ -40,7 +40,13 @@ void BoostUDP::readhandler(const boost::system::error_code & error, std::size_t 
 	boost::mutex::scoped_lock look(mutex_);
 
 	if (error) {
-		//throw std::runtime_error("Error reading UDP message.");
+		std::string errorMsg = error.message();
+		if (errorMsg == "An invalid argument was supplied") {
+			// ignore this for now
+		}
+		else {
+			throw std::runtime_error("Error reading UDP message." + error.message());
+		}
 	}
 
 	int c;
@@ -50,6 +56,16 @@ void BoostUDP::readhandler(const boost::system::error_code & error, std::size_t 
 			read_callback_(c);
 		}
 	}
+
+	socket_->async_receive_from(boost::asio::buffer(readbuffer),
+		remote_endpoint,
+		boost::bind(&BoostUDP::readhandler, this,
+			boost::asio::placeholders::error,
+			boost::asio::placeholders::bytes_transferred
+		));
+
+	//boost::unique_lock<boost::mutex> lock(mutex_);
+
 		
 }
 
@@ -103,52 +119,6 @@ void BoostUDP::write(std::vector<int> data)
 	write(converted);
 }
 
-//void BoostUDP::writeVector(std::vector<std::vector<unsigned char>> data)
-//{
-//	if (!socket_->is_open()) {
-//		throw std::runtime_error("UDP socket has not been opened");
-//	}
-//
-//	for (auto& message : data) {
-//		socket_->send_to(boost::asio::buffer(message), remote_endpoint, 0, err);
-//	}
-//
-//	//for (size_t i = 0; i < data.size(); i += 2)
-//	//{
-//	//	if (i+1 < data.size())
-//	//	{
-//	//		std::vector<unsigned char> packet;
-//	//		for (auto& byte : data[i]) {
-//	//			packet.push_back(byte);
-//	//		}
-//	//		for (auto& byte : data[i+1]) {
-//	//			packet.push_back(byte);
-//	//		}
-//	//		socket_->send_to(boost::asio::buffer(packet), remote_endpoint, 0, err);
-//	//	}
-//	//	else
-//	//	{
-//	//		socket_->send_to(boost::asio::buffer(data[i]), remote_endpoint, 0, err);
-//	//	}
-//	//}
-//}
-//
-//void BoostUDP::writeVector(std::vector<std::vector<int>> data)
-//{
-//	std::vector<std::vector<unsigned char>> converted(data.size());
-//	for (int idx = 0; idx < data.size(); idx++) {
-//		converted[idx].resize(data[idx].size());
-//		for (int idy = 0; idy < data[idx].size(); idy++)
-//		{
-//			if (data[idx][idy] < 0 || data[idx][idy] > 255) {
-//				throw std::runtime_error("Byte value needs to be in range 0-255");
-//			}
-//			converted[idx][idy] = data[idx][idy];
-//		}
-//	}
-//
-//	writeVector(converted);
-//}
 
 void BoostUDP::writeVector(std::vector<std::vector<unsigned char>> data)
 {

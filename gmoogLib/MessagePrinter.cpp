@@ -3,6 +3,8 @@
 
 void MessagePrinter::callback(int byte)
 {
+	std::cout << std::hex << byte;
+	return;
 	if (!isReceiving) {
 		header[headeridx] = byte;
 		headeridx++;

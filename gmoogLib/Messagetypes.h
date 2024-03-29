@@ -145,7 +145,7 @@ struct SetLoadFrequency : KA007_Message_Base
 
 		std::cout << "Sending bytes: ";
 		for(auto& byte : bytes)
-			std::cout << byte << " ";
+			std::cout << std::hex << byte << " ";
 		std::cout << "\n";
 
 		return bytes;
@@ -167,7 +167,7 @@ struct TerminateSequence : KA007_Message_Base
 
 		std::cout << "Sending bytes: ";
 		for (auto& byte : bytes)
-			std::cout << byte << " ";
+			std::cout << std::hex << byte << " ";
 		std::cout << "\n";
 
 		return bytes;

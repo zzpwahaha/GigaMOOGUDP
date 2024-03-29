@@ -63,7 +63,7 @@ void gigaMoog::zeroAll() {
 
 }
 
-void gigaMoog::setDAC(int DAC, int channels, float *freqs, float *amps, float *phases) {
+void gigaMoog::setDAC(int DAC, int channels, double* freqs, double* amps, double* phases) {
 	{
 		MessageSender ms;
 

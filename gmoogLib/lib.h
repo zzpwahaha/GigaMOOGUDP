@@ -22,7 +22,7 @@ public:
 	int test();
 	void zeroAll();
 	void endMessage();
-	void setDAC(int DAC, int channels, float *freqs, float *amps, float *phases);
+	void setDAC(int DAC, int channels, double *freqs, double*amps, double*phases);
 
 	gigaMoog();
 	virtual ~gigaMoog(void);
@@ -35,6 +35,6 @@ extern "C" {
 	__declspec(dllexport) gigaMoog* gm_new(void) { return new gigaMoog(); }
 	__declspec(dllexport) int gm_test(gigaMoog* gm) { return gm->test(); }
 	__declspec(dllexport) void gm_zeroAll(gigaMoog* gm) { gm->zeroAll(); }
-	__declspec(dllexport) void gm_setDAC(gigaMoog* gm, int DAC, int channels, float freqs[], float amps[], float phases[]) { gm->setDAC(DAC, channels, freqs, amps, phases); }
+	__declspec(dllexport) void gm_setDAC(gigaMoog* gm, int DAC, int channels, double freqs[], double amps[], double phases[]) { gm->setDAC(DAC, channels, freqs, amps, phases); }
 	__declspec(dllexport) void gm_endMessage(gigaMoog* gm) { gm->endMessage(); }
 }
