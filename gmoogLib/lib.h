@@ -24,6 +24,17 @@ public:
 	void endMessage();
 	void setDAC(int DAC, int channels, double *freqs, double*amps, double*phases);
 
+	void _zeroAll(MessageSender& ms);
+	void _setDAC(MessageSender& ms, int DAC, int channels, double* freqs, double* amps, double* phases);
+	void _endMessage(MessageSender& ms);
+
+
+	void zeroAndSetDAC(int DAC, int channels, double* freqs, double* amps, double* phases);
+	void zeroAndSetTwoDACs(int DAC0, int channels0, double* freqs0, double* amps0, double* phases0,
+		int DAC1, int channels1, double* freqs1, double* amps1, double* phases1);
+
+	void send(MessageSender& ms);
+
 	gigaMoog();
 	virtual ~gigaMoog(void);
 
@@ -37,4 +48,11 @@ extern "C" {
 	__declspec(dllexport) void gm_zeroAll(gigaMoog* gm) { gm->zeroAll(); }
 	__declspec(dllexport) void gm_setDAC(gigaMoog* gm, int DAC, int channels, double freqs[], double amps[], double phases[]) { gm->setDAC(DAC, channels, freqs, amps, phases); }
 	__declspec(dllexport) void gm_endMessage(gigaMoog* gm) { gm->endMessage(); }
+	__declspec(dllexport) void gm_zeroAndSetDAC(gigaMoog* gm, int DAC, int channels, double freqs[], double amps[], double phases[]) {
+		gm->zeroAndSetDAC(DAC, channels, freqs, amps, phases);
+	}
+	__declspec(dllexport) void gm_zeroAndSetTwoDACs(gigaMoog* gm, int DAC0, int channels0, double freqs0[], double amps0[], double phases0[],
+		int DAC1, int channels1, double freqs1[], double amps1[], double phases1[]) {
+		gm->zeroAndSetTwoDACs(DAC0, channels0, freqs0, amps0, phases0, DAC1, channels1, freqs1, amps1, phases1);
+	}
 }
